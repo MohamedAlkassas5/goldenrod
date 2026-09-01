@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "clickhouse": {
+      "command": "C:\\Users\\Q\\.local\\bin\\mcp-clickhouse.exe",
+      "args": [],
+      "env": {
+        "CLICKHOUSE_HOST": "${CLICKHOUSE_HOST:-localhost}",
+        "CLICKHOUSE_PORT": "${CLICKHOUSE_PORT:-8123}",
+        "CLICKHOUSE_USER": "${CLICKHOUSE_USER:-default}",
+        "CLICKHOUSE_PASSWORD": "${CLICKHOUSE_PASSWORD:-}",
+        "CLICKHOUSE_SECURE": "${CLICKHOUSE_SECURE:-false}",
+        "CLICKHOUSE_VERIFY": "false",
+        "CLICKHOUSE_DATABASE": "${CLICKHOUSE_DATABASE:-goldenrod}",
+
+        "CLICKHOUSE_ALLOW_WRITE_ACCESS": "true",
+        "CLICKHOUSE_ALLOW_DROP": "false",
+
+        "CHDB_ENABLED": "false"
+      }
+    }
+  }
+}

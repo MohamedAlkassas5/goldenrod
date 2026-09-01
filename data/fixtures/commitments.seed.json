@@ -1,0 +1,173 @@
+{
+  "production_id": "fayoum",
+  "commitments": [
+    {
+      "seed_key": "rana-22-shot",
+      "entity_id": "entity:rana",
+      "scene_id": "22",
+      "state": "shot",
+      "cost_band": "high",
+      "committed_at": "2026-08-28 21:15:00",
+      "notes": "Scene 22 completed on flat block day 3. Coverage and the phone single are in the can."
+    },
+    {
+      "seed_key": "letter-22-shot",
+      "entity_id": "entity:letter",
+      "scene_id": "22",
+      "state": "shot",
+      "cost_band": "high",
+      "committed_at": "2026-08-28 21:15:00",
+      "notes": "Letter played open on the kitchen table throughout. Inserts done."
+    },
+    {
+      "seed_key": "flat-22-shot",
+      "entity_id": "entity:flat",
+      "scene_id": "22",
+      "state": "shot",
+      "cost_band": "high",
+      "committed_at": "2026-08-28 21:15:00",
+      "notes": "Kitchen wrapped. Access window with the owner has closed."
+    },
+
+    {
+      "seed_key": "rana-18-cast",
+      "entity_id": "entity:rana",
+      "scene_id": "18",
+      "state": "cast",
+      "cost_band": "high",
+      "committed_at": "2026-07-20 12:00:00",
+      "notes": "Principal, contracted."
+    },
+    {
+      "seed_key": "letter-18-built",
+      "entity_id": "entity:letter",
+      "scene_id": "18",
+      "state": "built",
+      "cost_band": "high",
+      "committed_at": "2026-08-20 12:00:00",
+      "notes": "Hero letter made, aged, and doubled for handling."
+    },
+    {
+      "seed_key": "tinbox-18-sourced",
+      "entity_id": "entity:tin-box",
+      "scene_id": "18",
+      "state": "sourced",
+      "cost_band": "low",
+      "committed_at": "2026-08-21 10:30:00",
+      "notes": "Period tin found at the Sayeda market."
+    },
+
+    {
+      "seed_key": "rana-24-cast",
+      "entity_id": "entity:rana",
+      "scene_id": "24",
+      "state": "cast",
+      "cost_band": "high",
+      "committed_at": "2026-07-20 12:00:00",
+      "notes": "Principal, contracted."
+    },
+    {
+      "seed_key": "tarek-24-cast",
+      "entity_id": "entity:tarek",
+      "scene_id": "24",
+      "state": "cast",
+      "cost_band": "high",
+      "committed_at": "2026-07-22 12:00:00",
+      "notes": "Principal, contracted."
+    },
+    {
+      "seed_key": "flat-24-permitted",
+      "entity_id": "entity:flat",
+      "scene_id": "24",
+      "state": "permitted",
+      "cost_band": "medium",
+      "committed_at": "2026-08-18 15:30:00",
+      "notes": "Living room day of the extended access window. Agreement signed."
+    },
+
+    {
+      "seed_key": "cafe-26-permitted",
+      "entity_id": "entity:cafe",
+      "scene_id": "26",
+      "state": "permitted",
+      "cost_band": "medium",
+      "committed_at": "2026-08-19 09:00:00",
+      "notes": "Pavement permit for the Friday morning."
+    },
+    {
+      "seed_key": "street-27-permitted",
+      "entity_id": "entity:street",
+      "scene_id": "27",
+      "state": "permitted",
+      "cost_band": "low",
+      "committed_at": "2026-08-19 09:10:00",
+      "notes": "One block, no closure."
+    },
+
+    {
+      "seed_key": "fayoum-31-scouted",
+      "entity_id": "entity:fayoum-land",
+      "scene_id": "31",
+      "state": "scouted",
+      "cost_band": "medium",
+      "committed_at": "2026-08-24 14:00:00",
+      "notes": "Tech scout done. Grove owner agreeable, paperwork not signed."
+    },
+    {
+      "seed_key": "letter-31-built",
+      "entity_id": "entity:letter",
+      "scene_id": "31",
+      "state": "built",
+      "cost_band": "high",
+      "committed_at": "2026-08-20 12:00:00",
+      "notes": "Same hero letter. The date is legible in the close-up."
+    },
+    {
+      "seed_key": "rana-31-planned",
+      "entity_id": "entity:rana",
+      "scene_id": "31",
+      "state": "planned",
+      "cost_band": "low",
+      "committed_at": "2026-08-25 09:00:00",
+      "notes": "On the one-liner for the Fayoum unit move. Not yet scheduled."
+    },
+
+    {
+      "seed_key": "farmhouse-33-planned",
+      "entity_id": "entity:farmhouse",
+      "scene_id": "33",
+      "state": "planned",
+      "cost_band": "low",
+      "committed_at": "2026-08-25 09:05:00",
+      "notes": "Same unit move as 31. Nothing committed beyond the one-liner."
+    },
+    {
+      "seed_key": "hamdy-33-planned",
+      "entity_id": "entity:hamdy",
+      "scene_id": "33",
+      "state": "planned",
+      "cost_band": "low",
+      "committed_at": "2026-08-25 09:05:00",
+      "notes": "Offer out, not accepted."
+    },
+    {
+      "seed_key": "letter-33-planned",
+      "entity_id": "entity:letter",
+      "scene_id": "33",
+      "state": "planned",
+      "cost_band": "low",
+      "committed_at": "2026-08-25 09:05:00",
+      "notes": "Referenced in dialogue only; no prop action."
+    },
+
+    {
+      "seed_key": "airport-1-none",
+      "entity_id": "entity:cairo-airport",
+      "scene_id": "1",
+      "state": "none",
+      "cost_band": "none",
+      "committed_at": "2026-08-05 09:00:00",
+      "notes": "Airport access not yet applied for."
+    }
+  ]
+}

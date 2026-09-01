@@ -1,0 +1,51 @@
+{
+  "production_id": "fayoum",
+  "call_sheet_id": "fayoum-day-14",
+  "shoot_date": "2026-09-04",
+  "issued_at": "2026-09-03T19:00:00Z",
+  "unit": "Main Unit",
+  "revision_id": "goldenrod-2026-08-29",
+  "prior_revision_id": "white-2026-08-01",
+  "scenes": [
+    {
+      "scene_number": "18",
+      "int_ext": "INT",
+      "day_night": "NIGHT",
+      "location": "Flat, Mother's Bedroom - Zamalek",
+      "synopsis": "Rana finds the tin box and the sealed letter.",
+      "page_eighths": 10,
+      "cast_entity_ids": ["entity:rana"],
+      "estimated_call": "18:00"
+    },
+    {
+      "scene_number": "24",
+      "int_ext": "INT",
+      "day_night": "NIGHT",
+      "location": "Flat, Living Room - Zamalek",
+      "synopsis": "Rana confronts Tarek about the sale of the Fayoum land.",
+      "page_eighths": 14,
+      "cast_entity_ids": ["entity:rana", "entity:tarek"],
+      "estimated_call": "20:30"
+    },
+    {
+      "scene_number": "26",
+      "int_ext": "EXT",
+      "day_night": "DAY",
+      "location": "Cafe, Zamalek",
+      "synopsis": "Rana and Tarek, uneasy truce, over untouched coffee.",
+      "page_eighths": 9,
+      "cast_entity_ids": ["entity:rana", "entity:tarek"],
+      "estimated_call": "07:00"
+    },
+    {
+      "scene_number": "27",
+      "int_ext": "EXT",
+      "day_night": "NIGHT",
+      "location": "Street, Zamalek",
+      "synopsis": "Rana walks home past a lit window.",
+      "page_eighths": 4,
+      "cast_entity_ids": ["entity:rana"],
+      "estimated_call": "22:00"
+    }
+  ]
+}

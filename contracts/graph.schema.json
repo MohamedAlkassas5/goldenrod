@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "goldenrod/graph.schema.json",
+  "title": "Film graph",
+  "description": "Output of the Extractor. knowledge_state and dependencies are the product; everything else is bookkeeping. IDENTITY: a fact is identified across revisions by (production_id, kind, established_in_scene_number, sorted(entity_ids)) — NOT by fact_id, which is emitted per-revision and is not stable. The loader resolves established_in_scene_number from established_in_scene_id via `scenes`, and resolves knowledge_state.fact_id / dependencies.from_fact_id to that key before writing. See db/clickhouse/schema.sql.",
+  "type": "object",
+  "required": ["production_id", "revision_id", "scenes", "entities", "facts", "knowledge_state", "dependencies"],
+  "properties": {
+    "production_id": { "type": "string" },
+    "revision_id": { "type": "string", "description": "e.g. 'blue-2026-08-25'" },
+
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["scene_id", "scene_number", "synopsis"],
+        "properties": {
+          "scene_id": { "type": "string" },
+          "scene_number": { "type": "string" },
+          "int_ext": { "enum": ["INT", "EXT", "INT/EXT"] },
+          "location_id": { "type": "string" },
+          "day_night": { "enum": ["DAY", "NIGHT", "DUSK", "DAWN", "CONTINUOUS"] },
+          "page_eighths": { "type": "integer" },
+          "synopsis": { "type": "string", "maxLength": 300 },
+          "text_hash": { "type": "string" },
+          "entity_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entity_id", "type", "name"],
+        "properties": {
+          "entity_id": { "type": "string" },
+          "type": { "enum": ["character", "location", "prop", "costume", "vehicle", "set", "symbol"] },
+          "name": { "type": "string" },
+          "aliases": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "facts": {
+      "type": "array",
+      "description": "Things the script has established. The diff operates on these, not on text.",
+      "items": {
+        "type": "object",
+        "required": ["fact_id", "statement", "kind", "established_in_scene_id", "source_line"],
+        "properties": {
+          "fact_id": { "type": "string", "description": "Per-revision handle only. NOT stable across revisions and never a join key — see the identity rule in this schema's top-level description." },
+          "statement": { "type": "string", "maxLength": 300 },
+          "kind": { "enum": ["world", "relationship", "possession", "knowledge", "physical", "temporal"] },
+          "established_in_scene_id": { "type": "string" },
+          "source_line": { "type": "integer" },
+          "entity_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "knowledge_state": {
+      "type": "array",
+      "description": "Who knows what, by when. This table catches the good findings.",
+      "items": {
+        "type": "object",
+        "required": ["character_entity_id", "fact_id", "scene_id", "knows"],
+        "properties": {
+          "character_entity_id": { "type": "string" },
+          "fact_id": { "type": "string" },
+          "scene_id": { "type": "string" },
+          "knows": { "type": "boolean" },
+          "acquired_via": { "type": "string", "description": "How they learned it, if they do" }
+        }
+      }
+    },
+
+    "dependencies": {
+      "type": "array",
+      "description": "What breaks if a fact changes.",
+      "items": {
+        "type": "object",
+        "required": ["dependency_id", "from_fact_id", "to_scene_id", "kind", "evidence_line"],
+        "properties": {
+          "dependency_id": { "type": "string" },
+          "from_fact_id": { "type": "string" },
+          "to_scene_id": { "type": "string" },
+          "kind": { "enum": ["references", "assumes", "contradicts_if_changed"] },
+          "evidence_line": { "type": "integer" },
+          "evidence_quote": { "type": "string", "maxLength": 300 }
+        }
+      }
+    }
+  }
+}

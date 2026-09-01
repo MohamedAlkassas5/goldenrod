@@ -1,0 +1,103 @@
+{
+  "production_id": "demo",
+  "decisions": [
+    {
+      "seed_key": "withhold-letter-reveal",
+      "revision_id": "blue-2026-08-25",
+      "scene_id": "24",
+      "entity_ids": ["entity:letter", "entity:rana"],
+      "decision_type": "story",
+      "selected_option": "Hold the letter reveal until scene 31",
+      "alternatives": ["Reveal in 18 as written", "Split the reveal across 18 and 31"],
+      "reason": "Network note after the table read: the act-two turn lands flat if the audience already knows about the letter. Hold it to 31.",
+      "cause_tag": "external_note",
+      "decided_by": "script.coordinator@demo",
+      "decided_at": "2026-08-12 14:30:00",
+      "status": "active"
+    },
+    {
+      "seed_key": "letter-practical-handwritten",
+      "revision_id": "blue-2026-08-25",
+      "scene_id": "31",
+      "entity_ids": ["entity:letter"],
+      "decision_type": "design",
+      "selected_option": "Practical hero letter, handwritten on period stock",
+      "alternatives": ["Typed", "Insert card only"],
+      "reason": "It is read in close-up twice; a printed prop reads as fake at that size.",
+      "cause_tag": "taste",
+      "decided_by": "production.designer@demo",
+      "decided_at": "2026-08-14 09:05:00",
+      "status": "active"
+    },
+    {
+      "seed_key": "flat-interior-location",
+      "revision_id": "blue-2026-08-25",
+      "scene_id": "24",
+      "entity_ids": ["entity:flat"],
+      "decision_type": "location",
+      "selected_option": "Practical flat, Zamalek",
+      "alternatives": ["Stage build", "Second practical in Maadi"],
+      "reason": "The stage build lost the window sightline the scene is blocked around, and the second practical had no parking for the unit.",
+      "cause_tag": "constraint",
+      "decided_by": "location.manager@demo",
+      "decided_at": "2026-08-10 16:40:00",
+      "status": "active"
+    },
+    {
+      "seed_key": "rana-recast-31",
+      "revision_id": "blue-2026-08-25",
+      "scene_id": "31",
+      "entity_ids": ["entity:rana"],
+      "decision_type": "casting",
+      "selected_option": "Hold the same performer for the 31 reveal",
+      "alternatives": ["Double for the insert"],
+      "reason": "The reveal is played on her face; a double cannot carry it.",
+      "cause_tag": "taste",
+      "decided_by": "first.ad@demo",
+      "decided_at": "2026-08-15 11:20:00",
+      "status": "active"
+    },
+    {
+      "seed_key": "street-night-move",
+      "revision_id": "blue-2026-08-25",
+      "scene_id": "12",
+      "entity_ids": ["entity:street"],
+      "decision_type": "schedule",
+      "selected_option": "Move the street work to the second night",
+      "alternatives": ["Shoot it first night"],
+      "reason": "The permit for the road closure only starts on the Tuesday.",
+      "cause_tag": "constraint",
+      "decided_by": "first.ad@demo",
+      "decided_at": "2026-08-09 08:15:00",
+      "status": "active"
+    },
+    {
+      "seed_key": "handheld-coverage-18",
+      "revision_id": "blue-2026-08-25",
+      "scene_id": "18",
+      "entity_ids": ["entity:rana"],
+      "decision_type": "camera",
+      "selected_option": "Sticks, not handheld",
+      "alternatives": ["Handheld"],
+      "reason": "The scene is stillness before the discovery; handheld pre-empts the shift in 31.",
+      "cause_tag": "taste",
+      "decided_by": "director@demo",
+      "decided_at": "2026-08-11 19:00:00",
+      "status": "active"
+    },
+    {
+      "seed_key": "letter-reveal-in-18-original",
+      "revision_id": "white-2026-08-01",
+      "scene_id": "18",
+      "entity_ids": ["entity:letter", "entity:rana"],
+      "decision_type": "story",
+      "selected_option": "Reveal the letter in 18",
+      "alternatives": [],
+      "reason": "Original structure before the table read; superseded by the network note.",
+      "cause_tag": "taste",
+      "decided_by": "script.coordinator@demo",
+      "decided_at": "2026-08-01 10:00:00",
+      "status": "superseded"
+    }
+  ]
+}

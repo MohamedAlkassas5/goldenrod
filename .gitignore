@@ -1,0 +1,38 @@
+.env
+.env.local
+*.local
+
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+dist/
+build/
+.next/
+out/
+
+.DS_Store
+.idea/
+.vscode/
+
+*.log
+tmp/
+scratch/
+
+# Local dev-server launch config. Ports are machine-specific — 8080 is inside a
+# reserved range on some Windows installs — so this is not shared.
+.claude/launch.json
+
+# service account keys — never commit these
+*.pem
+*-key.json
+service-account*.json
+
+# ...but the hand-written answer key is the evaluation set, not a credential, and
+# the pattern above catches it by accident. Without it nobody who clones this can
+# run the scoring tests, which the run instructions promise they can.
+!data/fixtures/answer-key.json

@@ -1,0 +1,826 @@
+/* Goldenrod — the call sheet, with findings attached.
+ *
+ * The design brief is one sentence: this must look like production paperwork,
+ * not like a dashboard. A 1st AD reads forty call sheets a shoot; anything that
+ * looks like a SaaS product reads as something extra to learn.
+ *
+ * So: goldenrod paper, because that is literally what a goldenrod revision is —
+ * the WGA colour issued for production-driven changes. Ink, not brand colour.
+ * Hairline rules and boxes, not cards and shadows. Uppercase micro-labels with
+ * letterspacing, the way a real sheet heads its columns. Courier for anything
+ * quoted out of the script, because that is what a screenplay is set in.
+ *
+ * Deliberately NOT here: rounded corners, gradients, drop shadows, a colour per
+ * scene. The last one matters most — a grid of coloured scene strips is a
+ * stripboard, and CLAUDE.md is explicit that if a screen starts to look like one
+ * we are being compared to Movie Magic and we lose that comparison.
+ */
+
+:root {
+  --paper:       #f2e2ad;
+  --paper-edge:  #e6d295;
+  --paper-sunk:  #ecd9a0;
+  --ink:         #1b1710;
+  --ink-soft:    #5d5236;
+  --ink-faint:   #8a7c58;
+  --rule:        #c4ac6c;
+  --rule-hair:   #d6c28c;
+
+  /* Commitment state. One hue, four weights: risk is a quantity, not a palette.
+     Red is reserved for `shot` — money already spent, nothing to negotiate. */
+  --shot:        #8c1c13;
+  --built:       #a8551a;
+  --mid:         #7a6a2a;
+  --low:         #6b6350;
+
+  --flag:        #8c1c13;
+  --clear:       #4a6b3a;
+
+  --mono: "Courier New", "Nimbus Mono PS", Courier, ui-monospace, monospace;
+  --sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #241f16;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The sheet itself: one piece of paper on a dark desk. */
+.sheet {
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--paper);
+  border-left: 1px solid var(--paper-edge);
+  border-right: 1px solid var(--paper-edge);
+}
+
+/* ---------------------------------------------------------------- header */
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 20px 28px 14px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.wordmark {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.wordmark + .tagline {
+  margin: 2px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.production {
+  text-align: right;
+}
+
+.production .title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.production .day {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+
+/* Who is reading. Sits in the masthead beside the production, because on a real
+   call sheet the distribution list is part of the header, not a setting. */
+.masthead > :first-child { margin-right: auto; }
+
+.identity {
+  text-align: right;
+  padding-left: 22px;
+  border-left: 1px solid var(--rule);
+  align-self: stretch;
+}
+
+.identity .field-label { display: block; margin: 0 0 4px; }
+
+.identity select {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--rule);
+  padding: 3px 6px;
+  max-width: 220px;
+}
+
+.identity .role-title {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* What this role is not being shown. Stated, never silently omitted. */
+.access-strip {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 7px 28px;
+  border-bottom: 1px solid var(--rule);
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 7px,
+    rgba(0, 0, 0, 0.035) 7px, rgba(0, 0, 0, 0.035) 14px);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.access-strip .who {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.access-strip .notes { font-family: var(--mono); }
+
+/* A quote that was removed, and the row set that was. Neither is "nothing
+   found" — they read as struck-through paperwork, which is what they are. */
+.quote.gone,
+.empty.withheld {
+  font-family: var(--mono);
+  font-style: normal;
+  color: var(--ink-faint);
+  background: rgba(0, 0, 0, 0.035);
+  border-left: 2px solid var(--rule);
+  padding: 2px 8px;
+}
+
+.empty.withheld { padding: 10px 12px; display: block; }
+
+/* Not a disabled button: there is no action here for this role to take. */
+.stamp.disabled {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px dashed var(--rule);
+  padding: 5px 11px;
+  white-space: nowrap;
+}
+
+/* The revision strip. This is the reason the check is running, so it says so. */
+.revision-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 32px;
+  padding: 9px 28px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-sunk);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.revision-strip b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.field-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-right: 6px;
+}
+
+/* -------------------------------------------------------------- pipeline */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-sunk);
+}
+
+.pipeline-label {
+  flex: 0 0 auto;
+  padding: 10px 14px 10px 28px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  align-self: center;
+}
+
+.steps {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.step {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 8px 12px;
+  border-left: 1px solid var(--rule-hair);
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--ink-faint);
+  cursor: default;
+  opacity: 0.45;
+  transition: opacity 0.18s ease, color 0.18s ease;
+}
+
+.step.done { opacity: 1; color: var(--ink); cursor: pointer; }
+.step.running { opacity: 1; color: var(--ink-soft); }
+.step.selected { background: var(--paper); box-shadow: inset 0 -2px 0 var(--ink); }
+
+.step .n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.step .name {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.step .meta {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.step.running .meta::after {
+  content: "···";
+  letter-spacing: 0.1em;
+}
+
+/* --------------------------------------------------------------- columns */
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.col { padding: 18px 28px 40px; min-width: 0; }
+.col + .col { border-left: 1px solid var(--rule); }
+
+.col-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 5px;
+  margin-bottom: 2px;
+}
+
+.col-head h2 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.col-head .note {
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+/* ------------------------------------------------------------ the scenes */
+.scene {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  border-bottom: 1px solid var(--rule-hair);
+}
+
+.scene-no {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  padding: 10px 8px 10px 0;
+  border-right: 1px solid var(--rule-hair);
+}
+
+.scene-body { padding: 10px 0 10px 12px; min-width: 0; }
+
+.slug {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.synopsis {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.scene-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.verdict {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.verdict.clear { color: var(--clear); }
+.verdict.flagged { color: var(--flag); }
+.verdict.pending { color: var(--ink-faint); }
+
+.offsheet {
+  margin-top: 26px;
+  border-top: 2px solid var(--ink);
+  padding-top: 8px;
+}
+
+.offsheet h3 {
+  margin: 0 0 3px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.offsheet p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.offsheet li {
+  font-family: var(--mono);
+  font-size: 12px;
+  list-style: none;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--rule-hair);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.offsheet ul { margin: 0; padding: 0; }
+
+/* ---------------------------------------------------------- the findings */
+.finding {
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--rank-colour, var(--low));
+  margin-top: 14px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.finding[data-state="shot"]      { --rank-colour: var(--shot); }
+.finding[data-state="built"],
+.finding[data-state="cast"]      { --rank-colour: var(--built); }
+.finding[data-state="permitted"],
+.finding[data-state="scouted"],
+.finding[data-state="sourced"],
+.finding[data-state="planned"]   { --rank-colour: var(--mid); }
+
+.finding-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule-hair);
+}
+
+/* The commitment tag. The ranking is the product, so it is the loudest thing
+   on the finding — read before the claim, not after it. */
+.tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--rank-colour, var(--low));
+  padding: 3px 7px;
+}
+
+.finding-scene {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.finding-kind {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.tomorrow {
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--flag);
+}
+
+.claim {
+  margin: 0;
+  padding: 11px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.evidence {
+  border-top: 1px solid var(--rule-hair);
+  padding: 9px 14px 11px;
+}
+
+.evidence h4 {
+  margin: 0 0 5px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+
+.evidence ul { margin: 0; padding: 0; list-style: none; }
+
+.evidence li {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 10px;
+  padding: 3px 0;
+  font-size: 13px;
+}
+
+.cite {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 2px;
+}
+
+.quote { font-family: var(--mono); font-size: 12.5px; }
+.why { color: var(--ink-soft); }
+.why b { color: var(--ink); font-weight: 400; }
+
+.action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule-hair);
+  padding: 9px 14px;
+  font-size: 13px;
+}
+
+.action .text::before {
+  content: "→ ";
+  color: var(--ink-faint);
+}
+
+/* Buttons: a rubber stamp, not a call to action. */
+button.stamp {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--ink);
+  padding: 5px 11px;
+  cursor: pointer;
+}
+
+button.stamp:hover { background: var(--ink); color: var(--paper); }
+button.stamp:disabled { opacity: 0.4; cursor: not-allowed; }
+button.stamp.ghost { border-color: var(--rule); color: var(--ink-soft); }
+
+.silenced {
+  border: 1px dashed var(--rule);
+  border-left: 4px solid var(--ink-faint);
+  margin-top: 14px;
+  padding: 9px 14px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.silenced .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+
+.silenced .body { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+
+.all-clear {
+  border: 1px solid var(--rule);
+  padding: 22px 16px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------- SQL panel */
+.query-panel {
+  border-top: 2px solid var(--ink);
+  background: var(--paper-sunk);
+  padding: 14px 28px 22px;
+}
+
+.query-panel .col-head { margin-bottom: 10px; }
+
+.query-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+pre.sql {
+  margin: 0;
+  padding: 12px;
+  background: #221d14;
+  color: #e8dcb6;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-height: 340px;
+  overflow-y: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+
+pre.sql .kw { color: #e0a33c; }
+pre.sql .str { color: #9fc07a; }
+pre.sql .cmt { color: #7a7059; font-style: italic; }
+
+.rows-wrap { overflow-x: auto; max-height: 340px; overflow-y: auto; }
+
+table.rows {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+table.rows th {
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--ink);
+  padding: 4px 10px 4px 0;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--paper-sunk);
+}
+
+table.rows td {
+  padding: 3px 10px 3px 0;
+  border-bottom: 1px solid var(--rule-hair);
+  white-space: nowrap;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty {
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-style: italic;
+  padding: 12px 0;
+}
+
+/* ------------------------------------------------------------ what we know */
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(760px, 94vw);
+  background: var(--paper);
+  border-left: 2px solid var(--ink);
+  transform: translateX(100%);
+  transition: transform 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.drawer[open], .drawer.open { transform: translateX(0); }
+
+.drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.drawer-head h2 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+
+.tab {
+  border: none;
+  border-right: 1px solid var(--rule-hair);
+  background: none;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-faint);
+  padding: 9px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab.on { color: var(--ink); box-shadow: inset 0 -2px 0 var(--ink); }
+.drawer-body { overflow: auto; padding: 14px 20px 28px; }
+
+.ledger-entry {
+  border-bottom: 1px solid var(--rule-hair);
+  padding: 9px 0;
+}
+
+.ledger-entry .top {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.ledger-entry .choice { font-size: 13.5px; margin-top: 3px; }
+.ledger-entry .reason { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+
+.pill {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  padding: 1px 5px;
+}
+
+.pill.superseded { color: var(--ink-faint); }
+.pill.deviation { border-color: var(--flag); color: var(--flag); }
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 16, 8, 0.5);
+  z-index: 15;
+}
+
+/* ------------------------------------------------------------------ modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 30;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  width: min(560px, 100%);
+  padding: 20px;
+}
+
+.modal-card h2 {
+  margin: 0 0 3px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.modal-card .lead { font-size: 13px; color: var(--ink-soft); margin: 0 0 14px; }
+
+label.field {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.modal-card textarea,
+.modal-card input {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--rule);
+  padding: 8px;
+  margin-bottom: 12px;
+  resize: vertical;
+}
+
+.modal-card textarea:focus,
+.modal-card input:focus { outline: 2px solid var(--ink); outline-offset: -1px; }
+
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.modal-note { font-size: 11.5px; color: var(--ink-soft); margin: 0 0 12px; }
+
+/* ----------------------------------------------------------------- footer */
+.sheet-foot {
+  border-top: 1px solid var(--rule);
+  padding: 12px 28px 26px;
+  font-size: 11px;
+  color: var(--ink-faint);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dropped { font-family: var(--mono); }
+
+.banner {
+  padding: 10px 28px;
+  background: var(--shot);
+  color: var(--paper);
+  font-size: 13px;
+  white-space: pre-line;
+  font-family: var(--mono);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .columns, .query-grid { grid-template-columns: minmax(0, 1fr); }
+  .col + .col { border-left: none; border-top: 1px solid var(--rule); }
+  .steps { flex-wrap: wrap; }
+  .step { flex: 1 0 33%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer, .step { transition: none; }
+}

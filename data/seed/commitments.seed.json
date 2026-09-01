@@ -1,0 +1,59 @@
+{
+  "production_id": "demo",
+  "commitments": [
+    {
+      "seed_key": "rana-24-shot",
+      "entity_id": "entity:rana",
+      "scene_id": "24",
+      "state": "shot",
+      "cost_band": "high",
+      "committed_at": "2026-08-28 19:40:00",
+      "notes": "Scene 24 coverage completed on the Friday. Re-shooting means a company day."
+    },
+    {
+      "seed_key": "letter-24-built",
+      "entity_id": "entity:letter",
+      "scene_id": "24",
+      "state": "built",
+      "cost_band": "high",
+      "committed_at": "2026-08-20 12:00:00",
+      "notes": "Hero letter made, aged and doubled."
+    },
+    {
+      "seed_key": "flat-24-scouted",
+      "entity_id": "entity:flat",
+      "scene_id": "24",
+      "state": "scouted",
+      "cost_band": "medium",
+      "committed_at": "2026-08-18 15:30:00",
+      "notes": "Tech scout done, location agreement signed."
+    },
+    {
+      "seed_key": "letter-31-sourced",
+      "entity_id": "entity:letter",
+      "scene_id": "31",
+      "state": "sourced",
+      "cost_band": "low",
+      "committed_at": "2026-08-22 10:10:00",
+      "notes": "Period stock ordered for the 31 insert."
+    },
+    {
+      "seed_key": "rana-31-planned",
+      "entity_id": "entity:rana",
+      "scene_id": "31",
+      "state": "planned",
+      "cost_band": "low",
+      "committed_at": "2026-08-25 09:00:00",
+      "notes": "On the one-liner, not yet scheduled."
+    },
+    {
+      "seed_key": "street-12-none",
+      "entity_id": "entity:street",
+      "scene_id": "12",
+      "state": "none",
+      "cost_band": "none",
+      "committed_at": "2026-08-09 08:20:00",
+      "notes": "Nothing committed; permit not yet applied for."
+    }
+  ]
+}

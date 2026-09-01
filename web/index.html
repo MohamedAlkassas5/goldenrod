@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goldenrod — call sheet</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23f2e2ad'/><rect x='6' y='7' width='20' height='3' fill='%231b1710'/><rect x='6' y='14' width='20' height='2' fill='%235d5236'/><rect x='6' y='19' width='13' height='2' fill='%235d5236'/><rect x='6' y='24' width='9' height='3' fill='%238c1c13'/></svg>">
+</head>
+<body>
+
+<main class="sheet">
+
+  <header class="masthead">
+    <div>
+      <h1 class="wordmark">Goldenrod</h1>
+      <p class="tagline">Pre-commitment check</p>
+    </div>
+    <div class="production">
+      <div class="title" id="production-title">—</div>
+      <div class="day" id="production-day">Loading the day</div>
+    </div>
+
+    <!-- Who is reading. Behind Cloud IAP the platform decides this and the
+         chooser is switched off; locally it stands in for the account picker.
+         Changing it changes a cookie, never a filter — the scoping is done on
+         the server and re-run from scratch. -->
+    <div class="identity" id="identity" hidden>
+      <span class="field-label">Signed in as</span>
+      <select id="identity-select" aria-label="Signed in as"></select>
+      <span class="role-title" id="identity-role">—</span>
+    </div>
+  </header>
+
+  <div class="revision-strip">
+    <span><span class="field-label">Shoot date</span><b id="f-shoot-date">—</b></span>
+    <span><span class="field-label">Issued</span><b id="f-issued">—</b></span>
+    <span><span class="field-label">Revision</span><b id="f-revision">—</b></span>
+    <span><span class="field-label">Diffed against</span><b id="f-prior">—</b></span>
+    <span style="margin-left:auto">
+      <button class="stamp ghost" id="open-drawer">What the office has logged</button>
+    </span>
+  </div>
+
+  <div id="banner"></div>
+
+  <!-- What this role is not being shown, said out loud. A page that silently
+       omits findings is worse than one that says it omitted them. -->
+  <div class="access-strip" id="access-strip" hidden></div>
+
+  <!-- Pipeline. Steps light up as they actually complete; nothing here is an
+       animation of a guess. Click one to see the query it sent. -->
+  <nav class="pipeline" aria-label="Check pipeline">
+    <div class="pipeline-label">Pipeline</div>
+    <div class="steps" id="steps"></div>
+  </nav>
+
+  <div class="columns">
+
+    <section class="col">
+      <div class="col-head">
+        <h2>Scheduled tomorrow</h2>
+        <div class="note" id="scene-count"></div>
+      </div>
+      <div id="scenes"></div>
+
+      <div class="offsheet" id="offsheet" hidden>
+        <h3>Broken, but not on tomorrow's sheet</h3>
+        <p>
+          The revision reaches past the day. These scenes are not scheduled and
+          are still affected — one of them has already been shot.
+        </p>
+        <ul id="offsheet-list"></ul>
+      </div>
+    </section>
+
+    <section class="col">
+      <div class="col-head">
+        <h2>What this revision broke</h2>
+        <div class="note">Ranked by what has<br>already been paid for</div>
+      </div>
+      <div id="findings"></div>
+    </section>
+
+  </div>
+
+  <!-- The query and the rows it returned, side by side. A query shown without
+       its result is a screenshot of intent rather than of work. -->
+  <section class="query-panel">
+    <div class="col-head">
+      <h2 id="query-title">ClickHouse · via the MCP server</h2>
+      <div class="note" id="query-note">Select a pipeline step above</div>
+    </div>
+    <div class="query-grid">
+      <pre class="sql" id="sql">—</pre>
+      <div class="rows-wrap" id="rows"></div>
+    </div>
+  </section>
+
+  <footer class="sheet-foot">
+    <div id="foot-left">Every finding cites a scene and line, a logged decision, or both. Findings that cannot cite are dropped.</div>
+    <div class="dropped" id="foot-right"></div>
+  </footer>
+
+</main>
+
+<!-- What the office has logged: the graph, and the ledger with its reasons. -->
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h2>What the production office has logged</h2>
+    <button class="stamp ghost" id="close-drawer">Close</button>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-tab="decisions">Decision ledger</button>
+    <button class="tab" data-tab="knowledge">Knowledge state</button>
+    <button class="tab" data-tab="facts">Facts</button>
+    <button class="tab" data-tab="commitments">Commitment state</button>
+    <button class="tab" data-tab="access">Access</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+
+<template id="tpl-modal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>Mark intentional</h2>
+      <p class="lead"></p>
+      <p class="modal-note">
+        This writes one row to the decision ledger and silences this finding on
+        every later run. The reason is mandatory, and the signature is not
+        typed: it is the identity you are signed in as. An unexplained
+        dismissal of an unreleased-script finding is not auditable, and a
+        signature anyone can type is not a signature.
+      </p>
+      <label class="field" for="m-reason">Reason — the why, in your words</label>
+      <textarea id="m-reason" rows="3"></textarea>
+      <p class="modal-note">Signed as <b class="signed-as">—</b></p>
+      <div class="modal-actions">
+        <button class="stamp ghost" data-act="cancel">Cancel</button>
+        <button class="stamp" data-act="confirm">Write to ledger &amp; re-run</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

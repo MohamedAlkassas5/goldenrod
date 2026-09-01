@@ -1,0 +1,180 @@
+{
+  "production_id": "fayoum",
+  "call_sheet_id": "fayoum-day-14",
+  "shoot_date": "2026-09-04",
+  "revision_id": "goldenrod-2026-08-29",
+  "prior_revision_id": "white-2026-08-01",
+  "notes": "HAND-WRITTEN, before the Gate existed. Do not edit this to match model output — that is how an honest evaluation stops being one. Scoring: precision = correct / produced, recall = correct / 3. Target precision >= 80%. Scenes 26 and 27 are on the call sheet and are NOT broken; a finding on either is a false positive.",
+  "expected_findings": [
+    {
+      "finding_id": "ak-1",
+      "scene": "22",
+      "shoot_date": "2026-09-04",
+      "severity": "high",
+      "commitment_state": "shot",
+      "kind": "knowledge_state",
+      "claim": "Scene 22 is already shot and plays Rana acting on the contents of the letter, but the goldenrod revision moves her reading of it to scene 31. She does not know about the sale yet.",
+      "evidence": [
+        {
+          "type": "scene_line",
+          "scene": "22",
+          "line": 98,
+          "quote": "She sold it. Was it you who did the papers?",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "22",
+          "line": 84,
+          "quote": "The LETTER is open on the kitchen table. RANA has the phone to her ear.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "18",
+          "line": 78,
+          "quote": "She turns the letter over. She does not open it.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "31",
+          "line": 180,
+          "quote": "RANA takes the letter out of her jacket. It is still sealed. She opens it here.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "decision",
+          "decision_id": "9910b5b8-ff5a-5767-a545-30bc71d9b386",
+          "reason": "Network note after the table read: the Fayoum turn lands flat if the audience already knows what the letter says. Hold the read to the grove.",
+          "decided_at": "2026-08-27T15:10:00Z",
+          "decided_by": "script.coordinator@fayoum"
+        },
+        {
+          "type": "commitment",
+          "entity_id": "entity:rana",
+          "entity_name": "RANA",
+          "state": "shot",
+          "committed_at": "2026-08-28T21:15:00Z"
+        }
+      ],
+      "suggested_action": "Confirm intentional, or flag 22 for a pickup while the flat access window can still be reopened."
+    },
+    {
+      "finding_id": "ak-2",
+      "scene": "24",
+      "shoot_date": "2026-09-04",
+      "severity": "high",
+      "commitment_state": "cast",
+      "kind": "knowledge_state",
+      "claim": "Scene 24 shoots tomorrow and has Rana confront Tarek about the sale, but under the goldenrod revision she does not learn of it until scene 31.",
+      "evidence": [
+        {
+          "type": "scene_line",
+          "scene": "24",
+          "line": 121,
+          "quote": "You knew she sold Fayoum.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "24",
+          "line": 140,
+          "quote": "She sold Fayoum, Tarek.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "18",
+          "line": 78,
+          "quote": "She turns the letter over. She does not open it.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "31",
+          "line": 180,
+          "quote": "RANA takes the letter out of her jacket. It is still sealed. She opens it here.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "decision",
+          "decision_id": "9910b5b8-ff5a-5767-a545-30bc71d9b386",
+          "reason": "Network note after the table read: the Fayoum turn lands flat if the audience already knows what the letter says. Hold the read to the grove.",
+          "decided_at": "2026-08-27T15:10:00Z",
+          "decided_by": "script.coordinator@fayoum"
+        },
+        {
+          "type": "commitment",
+          "entity_id": "entity:rana",
+          "entity_name": "RANA",
+          "state": "cast",
+          "committed_at": "2026-07-20T12:00:00Z"
+        }
+      ],
+      "suggested_action": "Confirm intentional, or cut Rana's knowledge of the sale from 24 before the 20:30 call."
+    },
+    {
+      "finding_id": "ak-3",
+      "scene": "33",
+      "shoot_date": "2026-09-04",
+      "severity": "medium",
+      "commitment_state": "planned",
+      "kind": "temporal",
+      "claim": "Hamdy dates the sale to seven years back, but the goldenrod revision redated the letter to March 2022, which is four years before the story present.",
+      "evidence": [
+        {
+          "type": "scene_line",
+          "scene": "33",
+          "line": 207,
+          "quote": "Seven years back. Spring.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "scene_line",
+          "scene": "31",
+          "line": 184,
+          "quote": "Handwritten, dated MARCH 2022.",
+          "revision_id": "goldenrod-2026-08-29"
+        },
+        {
+          "type": "decision",
+          "decision_id": "8a42cbf6-2309-5e89-b294-b61e9e89ac83",
+          "reason": "Broadcaster wanted the mother's illness inside the last five years so the campaign can call it contemporary. 2019 read as history.",
+          "decided_at": "2026-08-27T15:40:00Z",
+          "decided_by": "script.coordinator@fayoum"
+        },
+        {
+          "type": "commitment",
+          "entity_id": "entity:farmhouse",
+          "entity_name": "Farmhouse",
+          "state": "planned",
+          "committed_at": "2026-08-25T09:05:00Z"
+        }
+      ],
+      "suggested_action": "Change Hamdy's line to four years, or revert the letter date."
+    }
+  ],
+  "expected_silence": [
+    {
+      "scene": "26",
+      "why": "On tomorrow's call sheet and untouched by the revision. Rana and Tarek discuss the funeral; nothing depends on the letter."
+    },
+    {
+      "scene": "27",
+      "why": "On tomorrow's call sheet and untouched. Rana walks home; no dialogue, no dependency."
+    },
+    {
+      "scene": "18",
+      "why": "This is the scene the revision CHANGED, not a scene the revision BROKE. It shoots tomorrow against the current pages, so it is correct as scheduled. Flagging it is crying wolf about the writer's own edit."
+    },
+    {
+      "scene": "36",
+      "why": "Tarek has read the letter by 36 in both revisions, so his line survives the move."
+    },
+    {
+      "scene": "12",
+      "why": "Mrs Wadida says the mother never sold the land. She does not know about the sale in either revision; that is dramatic irony, not a continuity break."
+    }
+  ]
+}

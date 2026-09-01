@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "goldenrod/finding.schema.json",
+  "title": "Finding",
+  "description": "One risk surfaced by the Gate. A finding with an empty evidence array MUST be dropped before rendering.",
+  "type": "object",
+  "required": ["finding_id", "scene", "shoot_date", "severity", "commitment_state", "claim", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "finding_id": { "type": "string" },
+    "scene": { "type": "string", "description": "Scene number as it appears in the script" },
+    "shoot_date": { "type": "string", "format": "date" },
+    "severity": { "enum": ["high", "medium", "low"] },
+    "commitment_state": {
+      "enum": ["shot", "built", "cast", "permitted", "scouted", "sourced", "planned", "none"],
+      "description": "Drives ranking. Order of risk is the order listed here."
+    },
+    "kind": {
+      "enum": ["knowledge_state", "fact_contradiction", "reference_break", "decision_conflict", "temporal"],
+      "description": "What sort of break this is"
+    },
+    "departments": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Crew departments this finding belongs to, derived from the types of the elements the break is about. Drives role-scoped access — see services/common/access.py. `script` means the break is about the story rather than a physical element, and only the unrestricted roles see it.",
+      "items": {
+        "enum": ["script", "cast", "props", "costume", "art", "locations", "transport"]
+      }
+    },
+    "redacted": {
+      "type": "boolean",
+      "description": "Set by the API, never by the Gate: true when verbatim script lines were removed because the viewer's role has no page access. The citation itself is kept, so the finding still cites."
+    },
+    "claim": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "One sentence. What is wrong, in production language, no hedging."
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "MINIMUM ONE. Enforced in code, not by prompt.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["type", "scene", "line", "quote"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "const": "scene_line" },
+              "scene": { "type": "string" },
+              "line": { "type": "integer", "minimum": 1 },
+              "quote": { "type": "string", "maxLength": 300 },
+              "revision_id": { "type": "string" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "decision_id", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "const": "decision" },
+              "decision_id": { "type": "string" },
+              "reason": { "type": "string" },
+              "decided_at": { "type": "string", "format": "date-time" },
+              "decided_by": { "type": "string" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "entity_id", "state"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "const": "commitment" },
+              "entity_id": { "type": "string" },
+              "entity_name": { "type": "string" },
+              "state": { "type": "string" },
+              "committed_at": { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      }
+    },
+    "suggested_action": { "type": "string", "maxLength": 240 },
+    "dismissed": {
+      "type": "object",
+      "description": "Set when a human marks this intentional. Silences it permanently.",
+      "required": ["intentional", "reason", "marked_by", "marked_at"],
+      "properties": {
+        "intentional": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "marked_by": { "type": "string" },
+        "marked_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

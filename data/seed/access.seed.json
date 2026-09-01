@@ -1,0 +1,53 @@
+{
+  "production_id": "demo",
+  "access": [
+    {
+      "subject": "script.coordinator@demo",
+      "display_name": "Script Coordinator",
+      "role": "script_coordinator",
+      "granted_by": "line.producer@demo",
+      "granted_at": "2026-06-01T09:00:00Z",
+      "notes": "Holds the pages. Accepts deviations in the office's name."
+    },
+    {
+      "subject": "first.ad@demo",
+      "display_name": "1st Assistant Director",
+      "role": "first_ad",
+      "granted_by": "line.producer@demo",
+      "granted_at": "2026-06-01T09:00:00Z",
+      "notes": "Issues the call sheet. Sees the whole day."
+    },
+    {
+      "subject": "line.producer@demo",
+      "display_name": "Line Producer",
+      "role": "producer",
+      "granted_by": "line.producer@demo",
+      "granted_at": "2026-06-01T09:00:00Z",
+      "notes": "Reads everything, signs nothing."
+    },
+    {
+      "subject": "props@demo",
+      "display_name": "Property Master",
+      "role": "props",
+      "granted_by": "line.producer@demo",
+      "granted_at": "2026-07-14T08:00:00Z",
+      "notes": "Prop findings only, and no verbatim pages."
+    },
+    {
+      "subject": "production.designer@demo",
+      "display_name": "Production Designer",
+      "role": "art",
+      "granted_by": "line.producer@demo",
+      "granted_at": "2026-06-20T08:00:00Z",
+      "notes": "Art and props."
+    },
+    {
+      "subject": "location.manager@demo",
+      "display_name": "Location Manager",
+      "role": "locations",
+      "granted_by": "line.producer@demo",
+      "granted_at": "2026-06-20T08:00:00Z",
+      "notes": "Locations and picture vehicles."
+    }
+  ]
+}

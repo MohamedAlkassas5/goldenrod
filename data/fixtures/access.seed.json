@@ -1,0 +1,61 @@
+{
+  "production_id": "fayoum",
+  "access": [
+    {
+      "subject": "script.coordinator@fayoum",
+      "display_name": "Nadia Fahmy",
+      "role": "script_coordinator",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-06-01T09:00:00Z",
+      "notes": "Holds the pages. Accepts deviations in the office's name."
+    },
+    {
+      "subject": "first.ad@fayoum",
+      "display_name": "Karim Sabry",
+      "role": "first_ad",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-06-01T09:00:00Z",
+      "notes": "Issues the call sheet. Sees the whole day."
+    },
+    {
+      "subject": "line.producer@fayoum",
+      "display_name": "Yasmin Adel",
+      "role": "producer",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-06-01T09:00:00Z",
+      "notes": "Oversight without authority to accept: reads everything, signs nothing."
+    },
+    {
+      "subject": "props@fayoum",
+      "display_name": "Hossam Nour",
+      "role": "props",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-07-14T08:00:00Z",
+      "notes": "Property master. Built the hero letter and the tin box; no page access."
+    },
+    {
+      "subject": "production.designer@fayoum",
+      "display_name": "Mona Rizk",
+      "role": "art",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-06-20T08:00:00Z",
+      "notes": "Art and props. No page access — the office sends sides."
+    },
+    {
+      "subject": "location.manager@fayoum",
+      "display_name": "Sherif Halim",
+      "role": "locations",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-06-20T08:00:00Z",
+      "notes": "Locations and picture vehicles."
+    },
+    {
+      "subject": "costume@fayoum",
+      "display_name": "Dalia Serry",
+      "role": "costume",
+      "granted_by": "line.producer@fayoum",
+      "granted_at": "2026-07-14T08:00:00Z",
+      "notes": "Costume supervisor."
+    }
+  ]
+}

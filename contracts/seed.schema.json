@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "goldenrod/seed.schema.json",
+  "title": "Ledger seed",
+  "description": "Input to services/loader/seed.py. Seeds the decision ledger and commitment state. `seed_key` is a stable, human-authored handle: the loader derives a deterministic UUID from it, so re-running a seed never duplicates a row. Enum values mirror db/clickhouse/schema.sql — unlike the graph tables, `decisions` and `commitments` carry no CHECK constraints, so this contract is the only enforcement.",
+  "type": "object",
+  "required": ["production_id"],
+  "additionalProperties": false,
+  "properties": {
+    "production_id": { "type": "string", "minLength": 1 },
+
+    "decisions": {
+      "type": "array",
+      "description": "The ledger. This is the only reason a finding can say WHY.",
+      "items": {
+        "type": "object",
+        "required": ["seed_key", "scene_id", "decision_type", "selected_option", "reason", "cause_tag", "decided_by", "decided_at"],
+        "additionalProperties": false,
+        "properties": {
+          "seed_key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Stable handle. The decision_id UUID is derived from it, which is what makes re-seeding idempotent on an append-only MergeTree."
+          },
+          "revision_id": { "type": "string", "default": "" },
+          "scene_id": {
+            "type": "string",
+            "description": "The locked scene number, matching the graph's stable scene coordinate."
+          },
+          "entity_ids": { "type": "array", "items": { "type": "string" } },
+          "decision_type": {
+            "enum": ["camera", "location", "casting", "design", "story", "schedule"]
+          },
+          "selected_option": { "type": "string", "minLength": 1 },
+          "alternatives": { "type": "array", "items": { "type": "string" } },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Mandatory, never empty. schema.sql: 'the WHY'. A seeded decision with no reason is worthless to a finding."
+          },
+          "cause_tag": {
+            "enum": ["taste", "constraint", "experiment", "external_note"],
+            "description": "One tap, four options. Only ever reason from 'taste'."
+          },
+          "decided_by": { "type": "string", "minLength": 1 },
+          "decided_at": { "type": "string", "format": "date-time" },
+          "status": { "enum": ["active", "superseded", "reverted"], "default": "active" },
+          "intentional_deviation": { "type": "integer", "enum": [0, 1], "default": 0 },
+          "deviation_reason": { "type": "string", "default": "" }
+        }
+      }
+    },
+
+    "commitments": {
+      "type": "array",
+      "description": "What has already been paid for. This is what makes findings rankable.",
+      "items": {
+        "type": "object",
+        "required": ["seed_key", "entity_id", "scene_id", "state", "cost_band", "committed_at"],
+        "additionalProperties": false,
+        "properties": {
+          "seed_key": { "type": "string", "minLength": 1 },
+          "entity_id": { "type": "string", "minLength": 1 },
+          "scene_id": { "type": "string" },
+          "state": {
+            "enum": ["none", "planned", "sourced", "built", "cast", "scouted", "permitted", "shot"],
+            "description": "Ranking order, highest risk first: shot > built/cast > permitted/scouted > sourced > planned > none. Encoded once, in the commitmentRank UDF."
+          },
+          "cost_band": { "enum": ["none", "low", "medium", "high"] },
+          "committed_at": { "type": "string", "format": "date-time" },
+          "notes": { "type": "string", "default": "" }
+        }
+      }
+    },
+
+    "access": {
+      "type": "array",
+      "description": "Who holds which role on this production. The policy — what each role may do — is code, in services/common/access.py; this is only the roster. No password, hash or token belongs here: the platform proves the identity (Cloud IAP), and this table says what that identity is entitled to.",
+      "items": {
+        "type": "object",
+        "required": ["subject", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The identity the platform proved — an email address. Matched case-insensitively."
+          },
+          "display_name": { "type": "string", "default": "" },
+          "role": {
+            "enum": ["first_ad", "script_coordinator", "producer", "props", "art", "locations", "costume"],
+            "description": "Must name a role in services/common/access.py ROLES. An unknown role denies rather than defaulting."
+          },
+          "granted_by": { "type": "string", "default": "" },
+          "granted_at": { "type": "string", "format": "date-time" },
+          "notes": { "type": "string", "default": "" }
+        }
+      }
+    }
+  }
+}
