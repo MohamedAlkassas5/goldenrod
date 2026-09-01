@@ -23,6 +23,8 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import time
 from typing import Any
 
 from jsonschema import Draft202012Validator
@@ -30,7 +32,37 @@ from jsonschema import Draft202012Validator
 from services.extractor.backend import SceneRequest
 from services.extractor.prompt import SCENE_SCHEMA, SYSTEM_PROMPT, build_prompt
 
-DEFAULT_MODEL = "gemini-2.5-pro"
+# Was gemini-2.5-pro until 2 September 2026, when a run against a fresh API key
+# came back 404: "no longer available to new users". The model list still
+# advertises it, so the only way to find out is to call it.
+#
+# Flash rather than pro as the default, which is a deliberate trade against
+# extraction quality. The pro tier reports a free-tier quota of exactly zero, so
+# a pro default makes `python -m services.extractor` fail for anyone following
+# the README with a fresh AI Studio key — and the run instructions are graded on
+# working, not on being ambitious. Anyone with billing, or running on Vertex,
+# should reach for pro:
+#
+#     GEMINI_MODEL=gemini-3.1-pro-preview python -m services.extractor ...
+DEFAULT_MODEL = "gemini-3.7-flash"
+
+# Worth retrying: rate limits and the provider having a bad moment. Everything
+# else — a retired model, a rejected key — is a fact about the configuration and
+# retrying it only makes the error take longer to read.
+TRANSIENT_STATUSES = frozenset({429, 500, 503, 504})
+INITIAL_BACKOFF_SECONDS = 2.0
+BACKOFF_CAP_SECONDS = 60.0
+
+
+def _retry_after(error: Exception) -> float | None:
+    """The delay the API asked for, if it named one.
+
+    It arrives inside a nested RetryInfo detail rather than a header, so it is
+    read out of the rendered error. Believing the server beats guessing at it:
+    on a per-minute quota the server knows exactly when the window reopens.
+    """
+    match = re.search(r"'retryDelay': '(\d+(?:\.\d+)?)s'", str(error))
+    return float(match.group(1)) if match else None
 
 
 class GeminiError(RuntimeError):
@@ -49,10 +81,15 @@ class GeminiBackend:
         temperature: float = 0.0,
         max_attempts: int = 3,
         client: Any = None,
+        max_transient_retries: int = 5,
     ):
         self.model = model or os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
         self.temperature = temperature
+        # Two separate budgets, because they are two separate failures: one is
+        # the model returning something the schema rejects, the other is the
+        # call not landing at all.
         self.max_attempts = max_attempts
+        self.max_transient_retries = max_transient_retries
         self._client = client
         self._validator = Draft202012Validator(SCENE_SCHEMA)
 
@@ -99,6 +136,56 @@ class GeminiBackend:
             temperature=self.temperature,
         )
 
+    # -- surviving the network ---------------------------------------------
+    def _generate(self, prompt: str, types):
+        """One model call, retried through transient failures and nothing else.
+
+        A batch pass is a long line of calls where any one of them can come back
+        503 "high demand, usually temporary" — and without this, scene 2 failing
+        for half a second throws away the whole run. That is merely annoying
+        while tuning and fatal while recording a demo.
+
+        Only transient statuses are retried. A retired model (404) or a bad key
+        (401/403) is not going to fix itself, and quietly retrying it five times
+        turns a clear error message into a slow mysterious one.
+        """
+        _, _ = self._import_sdk()
+        import httpx
+        from google.genai import errors as genai_errors
+
+        delay = INITIAL_BACKOFF_SECONDS
+        for attempt in range(1, self.max_transient_retries + 1):
+            try:
+                return self.client.models.generate_content(
+                    model=self.model, contents=prompt, config=self._config(types)
+                )
+            # Two layers fail differently and both have to be caught here. The
+            # API answering 503 is a `genai` error; the connection being reset
+            # mid-request never becomes one, because no response arrived to turn
+            # into it. A pass that survives the first and dies on the second has
+            # not been made robust, only made to look it — which is exactly what
+            # happened on scene 36 of the first full run.
+            except (genai_errors.APIError, httpx.TransportError) as exc:
+                status = getattr(exc, "code", None)
+                transport = isinstance(exc, httpx.TransportError)
+                if not transport and status not in TRANSIENT_STATUSES:
+                    raise GeminiError(
+                        f"{self.model} refused the call ({status}). This is not a "
+                        f"transient error and was not retried: {exc}\n"
+                        f"If the model has been retired, set GEMINI_MODEL to one "
+                        f"your credentials can reach."
+                    ) from exc
+                if attempt == self.max_transient_retries:
+                    raise GeminiError(
+                        f"{self.model} still failing after "
+                        f"{self.max_transient_retries} attempts "
+                        f"({'connection' if transport else status}): {exc}"
+                    ) from exc
+                # The API often says how long to wait. Believe it over our guess.
+                wait = _retry_after(exc) or delay
+                time.sleep(min(wait, BACKOFF_CAP_SECONDS))
+                delay = min(delay * 2, BACKOFF_CAP_SECONDS)
+
     # -- the backend interface ---------------------------------------------
     def extract_scene(self, request: SceneRequest) -> dict:
         _, types = self._import_sdk()
@@ -108,11 +195,7 @@ class GeminiBackend:
         complaint = ""
         last_error = ""
         for attempt in range(1, self.max_attempts + 1):
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=prompt + complaint,
-                config=self._config(types),
-            )
+            response = self._generate(prompt + complaint, types)
             payload, last_error = self._decode(getattr(response, "text", "") or "")
             if payload is not None:
                 return payload
