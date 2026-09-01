@@ -1,0 +1,32 @@
+# What Cloud Build does NOT need uploaded. Keeps the build context small and
+# keeps anything local out of the image.
+#
+# Note this does not inherit .gitignore: the presence of this file switches that
+# behaviour off, so everything to exclude is listed here explicitly.
+
+.git/
+.gitignore
+.gitattributes
+
+# Never. It is gitignored too, but a build context is a second way for a local
+# file to reach a server, and secrets get one belt and one pair of braces.
+.env
+.env.local
+*.pem
+*-key.json
+service-account*.json
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Machine-local editor and dev-server configuration.
+.claude/
+.idea/
+.vscode/
+
+# The Extractor's output. Regenerated from the screenplay; not part of the image.
+data/fixtures/graph-*.json

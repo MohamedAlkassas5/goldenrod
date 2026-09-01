@@ -25,6 +25,17 @@ api = [
     "fastapi>=0.110",
     "uvicorn[standard]>=0.27",
 ]
+# The official ClickHouse MCP server. Not imported anywhere — it is launched as a
+# subprocess from .mcp.json and spoken to over stdio, which is the whole point:
+# it holds the only ClickHouse connection in the system. Declared here so that
+# `pip install -e ".[deploy]"` produces a working container, and so the runtime
+# dependency is visible to anyone reading the project rather than implied.
+# Pinned rather than floated: this is the version the whole suite was verified
+# against, and the demo is not the place to discover that a server release moved
+# a tool name.
+deploy = [
+    "mcp-clickhouse==0.4.1",
+]
 
 [project.scripts]
 goldenrod-load = "services.loader.__main__:main"

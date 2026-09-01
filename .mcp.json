@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "clickhouse": {
-      "command": "C:\\Users\\Q\\.local\\bin\\mcp-clickhouse.exe",
+      "command": "mcp-clickhouse",
       "args": [],
       "env": {
         "CLICKHOUSE_HOST": "${CLICKHOUSE_HOST:-localhost}",
@@ -9,7 +9,7 @@
         "CLICKHOUSE_USER": "${CLICKHOUSE_USER:-default}",
         "CLICKHOUSE_PASSWORD": "${CLICKHOUSE_PASSWORD:-}",
         "CLICKHOUSE_SECURE": "${CLICKHOUSE_SECURE:-false}",
-        "CLICKHOUSE_VERIFY": "false",
+        "CLICKHOUSE_VERIFY": "${CLICKHOUSE_VERIFY:-true}",
         "CLICKHOUSE_DATABASE": "${CLICKHOUSE_DATABASE:-goldenrod}",
 
         "CLICKHOUSE_ALLOW_WRITE_ACCESS": "true",

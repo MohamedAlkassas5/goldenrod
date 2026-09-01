@@ -229,16 +229,38 @@ finding is dropped. This single rule is most of our credibility.
 
 | Requirement | How we satisfy it | Status |
 |---|---|---|
-| Gemini | Reasoning layer for Extractor and Gate | ☐ |
-| Google Cloud | Hosting, storage, runtime | ☐ |
-| Agent Builder / Gemini Enterprise Agent Platform | Agent runtime and orchestration — **mandatory**, verify current API surface yourself | ☐ |
-| ClickHouse MCP server **at runtime** | Ledger + commitments read/written through it | ☐ |
-| Public repo, OSI licence | Detectable at the top of the repo page, in the About section | ☐ |
-| **Run instructions in the README** | Graded — the repo must contain "all instructions needed to run". Ours is currently a stub | ☐ |
+| Gemini | Reasoning layer for the Extractor | ☑ `google-genai`, called through Vertex AI |
+| Google Cloud | Hosting, storage, runtime | ☑ Cloud Run + Vertex AI |
+| Agent Builder / Gemini Enterprise Agent Platform | **Not mandatory — this row was wrong.** See below | ☑ satisfied by Vertex AI |
+| ClickHouse MCP server **at runtime** | Ledger + commitments read/written through it | ☑ |
+| Public repo, OSI licence | Detectable at the top of the repo page, in the About section | ☑ MIT, detected by GitHub |
+| **Run instructions in the README** | Graded — the repo must contain "all instructions needed to run" | ☑ |
 | Hosted project URL | Live and working | ☐ |
 | Demo video | ≤3 min, English or subtitled, YouTube/Vimeo | ☐ |
 | New work, created during the contest period | Commit history starts now | ☐ |
 | Team ≤ 4 | — | ☐ |
+
+### Correction: Agent Builder is not mandatory
+
+The row above used to read *"Agent runtime and orchestration — **mandatory**, verify current
+API surface yourself"*. It was checked against the Devpost rules page on 2 September and it
+is wrong. The rules say the project *"should be built using Google Cloud and the specific
+Partner products relevant to your chosen track"*, and name the acceptable Google Cloud
+packages as **`google-adk`, `google-genai`, `google-generativeai`, or
+`google-cloud-aiplatform` — "any generation, legacy libraries count equally"**.
+
+`services/extractor/gemini.py` imports and calls `google-genai` against Vertex AI at
+runtime. The requirement is met. **Do not build a second deploy surface on Agent Engine to
+satisfy a rule that does not exist** — that is a day or two, in the week where the honest
+precision number and the video still have to happen.
+
+The ClickHouse track wording, for the same reason, verbatim: the project *"must actively use
+ClickHouse at runtime via the official ClickHouse MCP server (`mcp-clickhouse`), connecting
+to a ClickHouse Cloud or self-hosted cluster."* That is exactly what was built.
+
+One more thing that page settles: the deadline really is **2:00 PM PT on 9 September 2026**.
+Press coverage of the hackathon has claimed 7 September. The rules page is the source that
+counts — but submit on the 8th anyway, as planned, rather than spending the margin.
 
 ### The runtime rule, verbatim
 

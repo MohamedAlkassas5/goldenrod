@@ -74,6 +74,11 @@ docker run -d --name goldenrod-ch -p 8123:8123 -p 9000:9000 clickhouse/clickhous
 pip install -e ".[dev]"
 ```
 
+Configuration is environment variables throughout. Copy `.env.example` to `.env` and fill
+in what you have — it is read at import and only ever *fills gaps*, so a real environment
+variable always wins over the file, and a deployment's own configuration can never be
+shadowed by a stray `.env`.
+
 ### 3. Install the ClickHouse MCP server
 
 All database access goes through it — the application never opens a ClickHouse
@@ -239,9 +244,27 @@ Integration tests skip automatically when no ClickHouse is reachable. `tests/tes
 scores a full run against the hand-written answer key — that number is the acceptance
 criterion in `SPEC.md` §8, and it is computed rather than asserted by hand.
 
+### 12. Deploy
+
+Cloud Run, against ClickHouse Cloud, built from source by Cloud Build — no local Docker
+daemon needed. Gemini goes through Vertex AI on the service's own identity, so no API key
+exists anywhere in the deployment.
+
+```bash
+gcloud run deploy goldenrod --source .
+```
+
+The full command with its flags, the IAM the service needs, how to load a production into
+ClickHouse Cloud, and what changes when you put Cloud IAP in front of it: see
+[`deploy/README.md`](deploy/README.md).
+
+The container launches the same `mcp-clickhouse` server from the same
+[`.mcp.json`](.mcp.json) that runs on a laptop. There is one code path to ClickHouse and it
+is the MCP server, in both places.
+
 ### Not built yet
 
-- TODO: deploy on Agent Platform, and a hosted URL
+- TODO: a hosted URL. The deploy is written and repeatable; the service is not up yet
 
 `data/fixtures/graph-v1.json` and `graph-v2.json` are not committed: they are the Extractor's
 output, and generating them honestly needs Gemini credentials. Run step 6 against both

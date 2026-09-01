@@ -1,0 +1,9 @@
+# Normalise to LF in the repository. Development happens on Windows and the
+# container is Linux; a Dockerfile or shell script that arrives with CRLF fails
+# in ways that are slow to diagnose, so line endings are decided here rather
+# than by whoever cloned it.
+* text=auto eol=lf
+
+# Screenplays are text and should diff as text — the fact-level diff is the
+# product, but a human still reads the pages.
+*.fountain text eol=lf

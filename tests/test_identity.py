@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import os
 
 import pytest
 
@@ -265,3 +266,50 @@ def test_split_statements_handles_the_real_schema():
         "decisions", "commitments", "findings", "access_grants", "access_log",
     ]
     assert any("FUNCTION" in s.upper() for s in stmts)
+
+
+# --- .env, and the rule that keeps a deployment safe from one ---------------
+def test_env_parses_the_shapes_people_actually_paste(tmp_path):
+    from services.common.env import parse_env
+
+    written = tmp_path / ".env"
+    written.write_text(
+        "# a comment\n"
+        "\n"
+        "export GOOGLE_CLOUD_PROJECT=fayoum-prod\n"
+        'CLICKHOUSE_HOST="xxx.clickhouse.cloud"\n'
+        "CLICKHOUSE_USER = default \n"
+        "not-a-setting\n",
+        encoding="utf-8",
+    )
+    assert parse_env(written.read_text(encoding="utf-8")) == {
+        "GOOGLE_CLOUD_PROJECT": "fayoum-prod",
+        "CLICKHOUSE_HOST": "xxx.clickhouse.cloud",
+        "CLICKHOUSE_USER": "default",
+    }
+
+
+def test_env_never_overrides_the_real_environment(tmp_path, monkeypatch):
+    """The rule the deployment depends on.
+
+    Cloud Run supplies its configuration as real environment variables. A `.env`
+    that reached an image must not be able to repoint a running service at
+    somebody's laptop, so the file fills gaps and never wins.
+    """
+    from services.common.env import load_env
+
+    written = tmp_path / ".env"
+    written.write_text("CLICKHOUSE_HOST=laptop\nGOLDENROD_UNSET_HERE=filled\n", encoding="utf-8")
+    monkeypatch.setenv("CLICKHOUSE_HOST", "xxx.clickhouse.cloud")
+    monkeypatch.delenv("GOLDENROD_UNSET_HERE", raising=False)
+
+    assert load_env(written) == ["GOLDENROD_UNSET_HERE"]
+    assert os.environ["CLICKHOUSE_HOST"] == "xxx.clickhouse.cloud"
+    assert os.environ["GOLDENROD_UNSET_HERE"] == "filled"
+
+
+def test_no_env_file_is_not_an_error(tmp_path):
+    """Running entirely from real environment variables is the container's normal."""
+    from services.common.env import load_env
+
+    assert load_env(tmp_path / "nothing-here.env") == []
