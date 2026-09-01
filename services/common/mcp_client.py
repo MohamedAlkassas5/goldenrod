@@ -71,8 +71,21 @@ class ClickHouseMCP:
             ch.run_query("SELECT 1")
     """
 
-    def __init__(self, server: str = "clickhouse", config_path: Path | None = None):
+    def __init__(
+        self,
+        server: str = "clickhouse",
+        config_path: Path | None = None,
+        env: dict[str, str] | None = None,
+    ):
+        """`env` overlays the resolved launch environment for this client only.
+
+        There is one caller and one reason: the database has to be created
+        before anything can connect *to* it, so the schema loader opens a client
+        against `default` first. Everything else uses the config as written.
+        """
         self._cfg = load_server_config(server, config_path)
+        if env:
+            self._cfg["env"] = {**self._cfg["env"], **env}
         self._proc: subprocess.Popen | None = None
         self._id = 0
         # One MCP server, one stdio pipe, one request id counter. The CLIs are

@@ -38,8 +38,24 @@ def _label(statement: str) -> str:
     return " ".join(words[:4])
 
 
+def create_database(database: str = "goldenrod") -> None:
+    """Create the database, from a client connected to `default`.
+
+    The chicken-and-egg this exists to break: the MCP server selects
+    CLICKHOUSE_DATABASE when it connects, so a client configured for `goldenrod`
+    cannot be the one that creates `goldenrod` — on a database that does not
+    exist yet, every statement including `CREATE DATABASE` fails with
+    UNKNOWN_DATABASE. It went unnoticed locally because the database was already
+    there; on a fresh ClickHouse Cloud service it is the first thing that
+    happens, and it stopped the run instructions dead.
+
+    `default` is guaranteed to exist on any ClickHouse, hosted or local.
+    """
+    with ClickHouseMCP(env={"CLICKHOUSE_DATABASE": "default"}) as bootstrap:
+        bootstrap.run_query(f"CREATE DATABASE IF NOT EXISTS {database}")
+
+
 def apply_schema(ch: ClickHouseMCP, database: str = "goldenrod") -> list[str]:
-    ch.run_query(f"CREATE DATABASE IF NOT EXISTS {database}")
     applied = []
     for statement in split_statements(SCHEMA.read_text(encoding="utf-8")):
         ch.run_query(statement)
@@ -54,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if not args.check:
+            create_database(args.database)
         with ClickHouseMCP() as ch:
             if args.check:
                 rows = ch.rows(

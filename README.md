@@ -244,6 +244,17 @@ Integration tests skip automatically when no ClickHouse is reachable. `tests/tes
 scores a full run against the hand-written answer key — that number is the acceptance
 criterion in `SPEC.md` §8, and it is computed rather than asserted by hand.
 
+**Point the suite at a throwaway ClickHouse, not the one your demo runs on.** The
+integration tests create their own productions (`test_gate`, `test_api_writeback` and
+friends) and write to the ledger, which is append-only. Once `.env` names a hosted service,
+that is where they would go — so override it for the run:
+
+```bash
+CLICKHOUSE_HOST=localhost CLICKHOUSE_PORT=8123 CLICKHOUSE_SECURE=false python -m pytest tests -q
+```
+
+Real environment variables beat `.env`, which is what makes that line work.
+
 ### 12. Deploy
 
 Cloud Run, against ClickHouse Cloud, built from source by Cloud Build — no local Docker
