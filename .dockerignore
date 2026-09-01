@@ -1,0 +1,30 @@
+# `COPY . .` would otherwise pull the local checkout's history, caches and
+# virtualenvs into the image. Cloud Build never sees these — .gcloudignore stops
+# them at the upload — but a local `docker build` would, and the two paths should
+# produce the same image.
+
+.git/
+.gitignore
+.gitattributes
+
+# Never. Gitignored and gcloudignored too: a build context is another way for a
+# local file to reach a server, and secrets get every layer of guard going.
+.env
+.env.local
+*.pem
+*-key.json
+service-account*.json
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+.claude/
+.idea/
+.vscode/
+
+# The Extractor's output. Regenerated from the screenplay; not part of the image.
+data/fixtures/graph-*.json
