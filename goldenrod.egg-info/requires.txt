@@ -1,0 +1,13 @@
+jsonschema>=4.20
+
+[api]
+fastapi>=0.110
+uvicorn[standard]>=0.27
+
+[dev]
+pytest>=8.0
+fastapi>=0.110
+httpx>=0.27
+
+[gemini]
+google-genai>=1.0

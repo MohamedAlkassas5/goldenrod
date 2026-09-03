@@ -1,0 +1,3 @@
+{
+  "tests/test_extractor.py::test_the_same_entity_under_two_types_stays_two_entities": true
+}

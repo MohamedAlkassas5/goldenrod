@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "goldenrod",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "services.api",
+        "--port",
+        "8137",
+        "--production",
+        "ui_check"
+      ],
+      "port": 8137
+    }
+  ]
+}

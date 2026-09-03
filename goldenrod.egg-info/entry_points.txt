@@ -1,0 +1,5 @@
+[console_scripts]
+goldenrod-check = services.gate.__main__:main
+goldenrod-extract = services.extractor.__main__:main
+goldenrod-load = services.loader.__main__:main
+goldenrod-serve = services.api.__main__:main
